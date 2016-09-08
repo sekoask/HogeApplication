@@ -10,8 +10,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class HogeSqlLiteOpenHelper extends SQLiteOpenHelper {
 
     private static final String DB ="hoge_sqllite.db";
-    private static final int DB_VERSION =2;
-    private static final String CREATE_TABLE = "create table hoge_message(id integer primary key autoincrement, message text not null,insert_tm integer not null);";
+    private static final int DB_VERSION =3;
+    private static final String CREATE_TABLE = "create table hoge_message(id integer primary key autoincrement, message text not null,insert_tm integer not null, latitude real, longitude real, altitude real);";
     private static final String DROP_TABLE = "drop table hoge_message;";
 
 

@@ -32,10 +32,10 @@ public class Main2Activity extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
 
         Intent intent = getIntent();
-        TextView textView = (TextView) findViewById(R.id.textView2);
+        TextView textView = (TextView) findViewById(R.id.sendTextView);
         textView.setText(intent.getStringExtra("INPUT_TEXT"));
 
-        Button backBtn = (Button) findViewById(R.id.button2);
+        Button backBtn = (Button) findViewById(R.id.backButton);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,7 +46,7 @@ public class Main2Activity extends AppCompatActivity {
 
         HogeSqlLiteOpenHelper hogeDbHelper = new HogeSqlLiteOpenHelper(getApplicationContext());
         hogeDb = hogeDbHelper.getReadableDatabase();
-        Cursor cursor = hogeDb.rawQuery("SELECT id,message,insert_tm FROM hoge_message ORDER BY insert_tm DESC;", null);
+        Cursor cursor = hogeDb.rawQuery("SELECT id,message,insert_tm, latitude, longitude, altitude FROM hoge_message ORDER BY insert_tm DESC;", null);
 
         listView = (ListView) findViewById(R.id.listView);
         listViewAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
@@ -65,6 +65,12 @@ public class Main2Activity extends AppCompatActivity {
             rows.append(cursor.getString(1));
             rows.append(":");
             rows.append(dateFormat.format(new Date(cursor.getLong(2))));
+            rows.append(":緯度");
+            rows.append(cursor.getDouble(3));
+            rows.append(":経度");
+            rows.append(cursor.getDouble(4));
+            rows.append(":高度");
+            rows.append(cursor.getDouble(5));
             listViewAdapter.add(rows.toString());
             cursor.moveToNext();
         }
