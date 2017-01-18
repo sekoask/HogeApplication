@@ -3,13 +3,16 @@ package jp.arc_net.hogeapplication;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -56,7 +59,6 @@ public class Main2Activity extends AppCompatActivity {
         if (maxLength > MAX_VIEW_ROWS) {
             maxLength = MAX_VIEW_ROWS;
         }
-
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         for (int i = 0; i < maxLength; i++) {
             StringBuilder rows = new StringBuilder();
@@ -76,6 +78,17 @@ public class Main2Activity extends AppCompatActivity {
         }
         listView.setAdapter(listViewAdapter);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Cursor cursor = hogeDb.rawQuery("SELECT latitude, longitude FROM hoge_message ORDER BY insert_tm DESC;", null);
+                cursor.move(position+1);
+                Uri uri = Uri.parse("geo:" + cursor.getDouble(0) + "," + cursor.getDouble(1));
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                intent.setPackage("com.google.android.apps.maps");
+                startActivity(intent);
+            }
+        });
 
     }
 }
